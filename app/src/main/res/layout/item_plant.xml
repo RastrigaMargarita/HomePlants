@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/ItemPlant"
+              android:clickable="true"
+              android:orientation="vertical"
+               android:focusable="true">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/itemNomer" android:textSize="14sp"
+            />
+
+            <ImageView
+                android:id="@+id/ItemImage"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:srcCompat="@drawable/tranparenticon" />
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" android:layout_weight="1" android:id="@+id/ItemTextPlant">
+
+            <TextView
+                android:id="@+id/ItemRod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_100"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/ItemVid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_100"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/ItemSort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_100"
+                android:textSize="18sp" />
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/ItemSupplier" android:textSize="14sp"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/ItemColor" android:textSize="14sp"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/ItemData" android:textSize="14sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <View
+            android:id="@+id/divider5"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider"
+    />
+</LinearLayout>
