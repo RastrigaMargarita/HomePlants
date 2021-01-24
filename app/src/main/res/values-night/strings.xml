@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HomePlants</string>
-    <string name="title_item_detail">Item Detail</string>
     <string name="add_plant">Add plant</string>
     <string name="not_working_yet">Not working yet</string>
 </resources>
