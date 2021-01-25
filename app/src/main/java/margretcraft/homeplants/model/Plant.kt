@@ -1,9 +1,9 @@
-package margretcraft.homeplants
+package margretcraft.homeplants.model
 
 import android.os.Parcel
 import android.os.Parcelable
 
-class ItemPlant(val nomer: Int, val id: Int, val rod: String?, val vid: String?, val sort: String?, val image: String?, val supplier: String?, val color: String?) : Parcelable {
+class Plant(val nomer: Int, val id: Int, val rod: String?, val vid: String?, val sort: String?, val image: String?, val supplier: String?, val color: String?) : Parcelable {
 
 
     constructor(parcel: Parcel) : this(
@@ -32,12 +32,12 @@ class ItemPlant(val nomer: Int, val id: Int, val rod: String?, val vid: String?,
         dest?.writeString(color)
     }
 
-    companion object CREATOR : Parcelable.Creator<ItemPlant> {
-        override fun createFromParcel(parcel: Parcel): ItemPlant {
-            return ItemPlant(parcel)
+    companion object CREATOR : Parcelable.Creator<Plant> {
+        override fun createFromParcel(parcel: Parcel): Plant {
+            return Plant(parcel)
         }
 
-        override fun newArray(size: Int): Array<ItemPlant?> {
+        override fun newArray(size: Int): Array<Plant?> {
             return arrayOfNulls(size)
         }
     }
