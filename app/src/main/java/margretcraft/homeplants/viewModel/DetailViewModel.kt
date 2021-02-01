@@ -1,17 +1,13 @@
 package margretcraft.homeplants.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import margretcraft.homeplants.model.Plant
-import margretcraft.homeplants.ui.ListViewState
+import margretcraft.homeplants.model.Repository
 
-class DetailViewModel(val plant: Plant) : ViewModel() {
-    private val viewStateLiveData: MutableLiveData<DetailViewModel> = MutableLiveData()
+class DetailViewModel(private val repository: Repository = Repository) : ViewModel() {
 
-    init {
-        viewStateLiveData.value = DetailViewModel(plant)
+    fun saveChanges(plant: Plant) {
+        repository.savePlant(plant)
     }
 
-    fun viewState(): LiveData<DetailViewModel> = viewStateLiveData
 }

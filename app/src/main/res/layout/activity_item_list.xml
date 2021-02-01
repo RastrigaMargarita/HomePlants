@@ -30,13 +30,5 @@
         <include layout="@layout/item_list" />
     </FrameLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabadd"
-        android:layout_width="@dimen/fab_size"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:contentDescription="@string/add_plant"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:layout_height="wrap_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

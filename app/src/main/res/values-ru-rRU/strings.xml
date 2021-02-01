@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Домашние растения</string>
+    <string name="title_item_detail">Детали</string>
+    <string name="add_plant">Добавить растение</string>
+    <string name="not_working_yet">Пока не работает</string>
+    <string name="new_plant_title">Новое растение</string>
+    <string name="decicuous">Лиственные</string>
+    <string name="blooming">Цветущие</string>
+    <string name="succulent">Суккуленты</string>
+    <string name="supplier">Поставщик</string>
+    <string name="color">Цвет</string>
+    <string name="Category">Группа</string>
+    <string name="Sort">Сорт</string>
+    <string name="Form">Вид</string>
+    <string name="Rod">Род</string>
+    <string name="saveplant">SavePlant</string>
+</resources>

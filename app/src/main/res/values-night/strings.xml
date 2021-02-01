@@ -2,4 +2,7 @@
 <resources>
     <string name="add_plant">Add plant</string>
     <string name="not_working_yet">Not working yet</string>
+    <string name="new_plant_title">New plant</string>
+    <string name="decicuous">Decicuous</string>
+    <string name="blooming">Blooming</string>
 </resources>

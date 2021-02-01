@@ -3,6 +3,7 @@
     package="margretcraft.homeplants">
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/violeticon"
         android:label="@string/app_name"
@@ -10,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HomePlants">
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".ui.ListActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.HomePlants.NoActionBar">
@@ -18,6 +20,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
         <activity
             android:name=".ui.DetailActivity"
