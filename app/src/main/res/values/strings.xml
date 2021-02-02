@@ -3,4 +3,15 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="add_plant">Add plant</string>
     <string name="not_working_yet">Not working yet</string>
+    <string name="new_plant_title">New plant</string>
+    <string name="decicuous">Decicuous</string>
+    <string name="blooming">Blooming</string>
+    <string name="succulent">Succulent</string>
+    <string name="supplier">Supplier</string>
+    <string name="color">Color</string>
+    <string name="Sort">Variety</string>
+    <string name="Form">Species</string>
+    <string name="Rod">Genus</string>
+    <string name="Category">Category</string>
+    <string name="saveplant">SavePlant</string>
 </resources>

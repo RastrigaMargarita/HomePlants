@@ -1,44 +1,48 @@
 package margretcraft.homeplants.model
 
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import margretcraft.homeplants.R
+import java.util.*
 
-class Plant(val nomer: Int, val id: Int, val rod: String?, val vid: String?, val sort: String?, val image: String?, val supplier: String?, val color: String?) : Parcelable {
 
+@Parcelize
+data class Plant(val nomer: Int,
+                 val id: Int,
+                 var category: Category = Category.BLOOMING,
+                 var rod: String,
+                 var vid: String,
+                 var sort: String,
+                 val image: String,
+                 var supplier: String,
+                 var color: String,
+                 val lastChanged: Date = Date()) : Parcelable {
 
-    constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-    )
-
-    override fun describeContents(): Int {
-        return 0;
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Plant
+        if (id != other.id) return false
+        return true
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(nomer)
-        dest?.writeInt(id)
-        dest?.writeString(rod)
-        dest?.writeString(vid)
-        dest?.writeString(sort)
-        dest?.writeString(image)
-        dest?.writeString(supplier)
-        dest?.writeString(color)
+    override fun hashCode(): Int {
+        return id.hashCode()
     }
+}
 
-    companion object CREATOR : Parcelable.Creator<Plant> {
-        override fun createFromParcel(parcel: Parcel): Plant {
-            return Plant(parcel)
-        }
+@Parcelize
+enum class Category(val catname: Int) : Parcelable {
+    DECICUOUS(R.string.decicuous),
+    BLOOMING(R.string.blooming),
+    SUCCULENT(R.string.succulent);
 
-        override fun newArray(size: Int): Array<Plant?> {
-            return arrayOfNulls(size)
+    companion object {
+        fun getCategoryByInt(ID: Int): Category = when (ID) {
+            0 -> DECICUOUS
+            1 -> BLOOMING
+            2 -> SUCCULENT
+            else -> BLOOMING
         }
     }
 }
