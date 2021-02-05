@@ -1,25 +1,40 @@
 package margretcraft.homeplants.viewModel
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.Observer
+import margretcraft.homeplants.model.BaseResult
 import margretcraft.homeplants.model.Plant
 import margretcraft.homeplants.model.Repository
+import margretcraft.homeplants.ui.BaseViewModel
 import margretcraft.homeplants.ui.ListViewState
 
-class ListViewModel(private val repository: Repository = Repository) : ViewModel() {
-    private val viewStateLiveData: MutableLiveData<ListViewState> = MutableLiveData()
 
-    init {
-        Repository.getPlants().observeForever { plants ->
-            viewStateLiveData.value = ListViewState(plants)
+class ListViewModel(val repository: Repository = Repository) : BaseViewModel<List<Plant>?, ListViewState>() {
+
+    private val repositoryPlants = repository.getPlants()
+
+    private val plantsObserver = object : Observer<BaseResult> {
+        override fun onChanged(t: BaseResult?) {
+            if (t == null) return
+
+            when (t) {
+                is BaseResult.Success<*> -> {
+                    viewStateLiveData.value = ListViewState(plants = t.data as? List<Plant>)
+                }
+                is BaseResult.Error -> {
+                    viewStateLiveData.value = ListViewState(error = t.error)
+                }
+            }
         }
     }
 
-    fun viewState(): LiveData<ListViewState> = viewStateLiveData
-
-    fun saveChanges(plant: Plant) {
-        repository.savePlant(plant)
+    init {
+        viewStateLiveData.value = ListViewState()
+        repositoryPlants.observeForever(plantsObserver)
     }
+
+    override fun onCleared() {
+        repositoryPlants.removeObserver(plantsObserver)
+    }
+
 }

@@ -7,15 +7,15 @@ import java.util.*
 
 
 @Parcelize
-data class Plant(val nomer: Int,
-                 val id: Int,
+data class Plant(val nomer: Int = 0,
+                 val id: String = UUID.randomUUID().toString(),
                  var category: Category = Category.BLOOMING,
-                 var rod: String,
-                 var vid: String,
-                 var sort: String,
-                 val image: String,
-                 var supplier: String,
-                 var color: String,
+                 var rod: String = "",
+                 var vid: String = "",
+                 var sort: String = "",
+                 val image: String = "",
+                 var supplier: String = "",
+                 var color: String = "",
                  val lastChanged: Date = Date()) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
@@ -29,6 +29,8 @@ data class Plant(val nomer: Int,
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+
 }
 
 @Parcelize

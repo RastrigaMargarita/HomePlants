@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import margretcraft.homeplants.R
 import margretcraft.homeplants.databinding.ActivityItemDetailBinding
 import margretcraft.homeplants.databinding.ItemDetailBinding
@@ -16,36 +14,48 @@ import margretcraft.homeplants.viewModel.DetailViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : BaseActivity<Plant?, DetailViewState>() {
 
-    lateinit var ui: ActivityItemDetailBinding
+    override val ui: ActivityItemDetailBinding by lazy { ActivityItemDetailBinding.inflate(layoutInflater) }
     lateinit var uidetail: ItemDetailBinding
-    private var currentPlant: Plant? = null
-    private lateinit var viewModel: DetailViewModel
+    override val layoutRes: Int = R.layout.activity_item_detail
+    private var currentPlant: Plant? = Plant()
+    override val viewModel: DetailViewModel by lazy { ViewModelProvider(this).get(DetailViewModel::class.java) }
     private lateinit var categoryArray: Array<String?>
 
     companion object {
         const val EXTRA_PLANT = "DetailActivity.extra.PLANT"
-        fun getStartIntent(context: Context, plant: Plant): Intent {
+        fun getStartIntent(context: Context, plantID: String): Intent {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra(EXTRA_PLANT, plant)
+            intent.putExtra(EXTRA_PLANT, plantID)
             return intent
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = ActivityItemDetailBinding.inflate(layoutInflater)
+
         uidetail = ItemDetailBinding.bind(ui.frameLayout.findViewById(R.id.item_detail))
-        setContentView(ui.root)
+
+        val plantID = intent.getStringExtra(EXTRA_PLANT)
         setSupportActionBar(ui.detailToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         categoryArray = arrayOfNulls<String>(3)
         for (category in Category.values()) {
             categoryArray.set(category.ordinal, getString(category.catname))
         }
 
-        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        ui.itemDetailContainer.findViewById<FloatingActionButton?>(R.id.fab).setOnClickListener {
+        plantID?.let { viewModel.loadPlant(it) }
+
+        supportActionBar?.title = if (currentPlant != null) {
+            SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(currentPlant!!.lastChanged)
+        } else {
+            getString(R.string.new_plant_title)
+        }
+
+        uidetail.fab.setOnClickListener {
+
             currentPlant?.rod = uidetail.itemRod.text.toString()
             currentPlant?.vid = uidetail.itemVid.text.toString()
             currentPlant?.sort = uidetail.itemSort.text.toString()
@@ -57,15 +67,19 @@ class DetailActivity : AppCompatActivity() {
             this.startActivity(Intent(this, ListActivity::class.java))
             this.finish()
         }
-        currentPlant = intent.getParcelableExtra(EXTRA_PLANT)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = if (currentPlant != null) {
-            SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(currentPlant!!.lastChanged)
-        } else {
-            getString(R.string.new_plant_title)
-        }
+
+
         var spinnerAdapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, categoryArray)
         uidetail.itemCategory.adapter = spinnerAdapter
+        initView()
+    }
+
+    override fun renderData(data: Plant?) {
+        this.currentPlant = data;
+        initView()
+    }
+
+    private fun initView() {
         if (currentPlant != null) {
             ui.toolbarLayout.title = "" + currentPlant?.nomer
             uidetail.itemRod.setText(currentPlant?.rod)
