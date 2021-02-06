@@ -4,8 +4,7 @@ import androidx.lifecycle.Observer
 import margretcraft.homeplants.model.BaseResult
 import margretcraft.homeplants.model.Plant
 import margretcraft.homeplants.model.Repository
-import margretcraft.homeplants.ui.BaseViewModel
-import margretcraft.homeplants.ui.DetailViewState
+import margretcraft.homeplants.ui.detail.DetailViewState
 
 class DetailViewModel(private val repository: Repository = Repository) : BaseViewModel<Plant?, DetailViewState>() {
 
@@ -22,7 +21,6 @@ class DetailViewModel(private val repository: Repository = Repository) : BaseVie
         repository.getPlantByID(plantID).observeForever(object : Observer<BaseResult> {
             override fun onChanged(t: BaseResult?) {
                 if (t == null) return
-
                 when (t) {
                     is BaseResult.Success<*> -> {
                         viewStateLiveData.value = DetailViewState(plant = t.data as? Plant)

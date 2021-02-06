@@ -1,10 +1,13 @@
-package margretcraft.homeplants.ui
+package margretcraft.homeplants.ui.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
+import margretcraft.homeplants.ui.list.ListActivity
+import margretcraft.homeplants.viewModel.BaseViewModel
 
 abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
 
@@ -15,19 +18,16 @@ abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ui.root)
-
-
-        viewModel.getViewState().observe(this, object : Observer<VS> {
-            override fun onChanged(t: VS?) {
-                if (t == null) return
-                if (t.data != null) renderData(t.data)
-                if (t.error != null) renderError(t.error)
+        viewModel.getViewState().observe(this, Observer<VS> { t ->
+            t?.apply {
+                data?.let { renderData(it) }
+                error?.let { renderError(it) }
             }
         })
     }
 
-    protected fun renderError(error: Throwable) {
-        if (error.message != null) showError(error.message!!)
+    protected open fun renderError(error: Throwable) {
+        error.message?.let { showError(error.message!!) }
     }
 
     protected fun showError(message: String) {
@@ -35,5 +35,6 @@ abstract class BaseActivity<T, VS : BaseViewState<T>> : AppCompatActivity() {
     }
 
     abstract fun renderData(data: T)
+
 
 }

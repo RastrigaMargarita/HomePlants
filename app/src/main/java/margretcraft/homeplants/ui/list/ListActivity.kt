@@ -1,4 +1,4 @@
-package margretcraft.homeplants.ui
+package margretcraft.homeplants.ui.list
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import margretcraft.homeplants.R
 import margretcraft.homeplants.databinding.ActivityItemListBinding
 import margretcraft.homeplants.model.Plant
-import margretcraft.homeplants.viewModel.DetailViewModel
+import margretcraft.homeplants.ui.base.BaseActivity
+import margretcraft.homeplants.ui.detail.DetailActivity
+import margretcraft.homeplants.ui.detail.DetailFragment
 import margretcraft.homeplants.viewModel.ListViewModel
 
 class ListActivity : BaseActivity<List<Plant>?, ListViewState>() {
@@ -16,8 +18,9 @@ class ListActivity : BaseActivity<List<Plant>?, ListViewState>() {
     private var mTwoPane = false
     override val ui: ActivityItemListBinding by lazy { ActivityItemListBinding.inflate(layoutInflater) }
     override val layoutRes: Int = R.layout.activity_item_list
-    val viewModelDetail: DetailViewModel by lazy { ViewModelProvider(this).get(DetailViewModel::class.java) }
-    override val viewModel: ListViewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
+
+    override val viewModel: ListViewModel by lazy {
+        ViewModelProvider(this).get(ListViewModel::class.java) }
     private lateinit var adapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +37,12 @@ class ListActivity : BaseActivity<List<Plant>?, ListViewState>() {
             }
         })
         ui.frameLayout.findViewById<RecyclerView>(R.id.recycler_item_list).adapter = adapter;
-        ui.frameLayout.findViewById<FloatingActionButton>(R.id.fabadd).setOnClickListener(View.OnClickListener {
+        ui.frameLayout.findViewById<FloatingActionButton>(R.id.fabadd)
+                .setOnClickListener(View.OnClickListener {
 
             setDetail(Plant())
         })
 
-        // viewModel.viewState().observe(this, Observer<ListViewState> { t -> t?.let { adapter.plants = t.plants } })
         if (mTwoPane) {
             if (adapter.plants.size > 0) {
                 setDetail(adapter.plants[0].copy())

@@ -5,7 +5,7 @@
     android:id="@+id/item_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ListActivity">
+    tools:context=".ui.list.ListActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabadd"
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.ListActivity"
+        tools:context=".ui.list.ListActivity"
         tools:listitem="@layout/item_plant" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
