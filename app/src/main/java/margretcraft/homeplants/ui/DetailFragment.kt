@@ -14,12 +14,10 @@ import margretcraft.homeplants.databinding.ItemDetailBinding
 import margretcraft.homeplants.model.Category
 import margretcraft.homeplants.model.Plant
 
-class DetailFragment
-
-    : Fragment() {
+class DetailFragment : Fragment() {
 
     lateinit var uidetail: ItemDetailBinding
-    private var currentPlant: Plant? = null
+    private var currentPlant: Plant? = Plant()
 
     private lateinit var categoryArray: Array<String?>
 
@@ -53,7 +51,7 @@ class DetailFragment
             currentPlant?.supplier = uidetail.itemSupplier.text.toString()
             currentPlant?.category = Category.getCategoryByInt(uidetail.itemCategory.selectedItemId.toInt())
             currentPlant?.let {
-                (activity as ListActivity).viewModel.saveChanges(currentPlant!!)
+                (activity as ListActivity).viewModelDetail.saveChanges(currentPlant!!)
                 val imm: InputMethodManager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0)
             }
