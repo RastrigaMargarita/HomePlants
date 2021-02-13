@@ -4,55 +4,83 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.firestore.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 private const val COLLECTION = "plants";
+private const val USERS_COLLECTION = "users";
 
 class FireStoreProvider : RemoteDataProvider {
 
     private val db = FirebaseFirestore.getInstance()
-    private val plantsReference = db.collection(COLLECTION)
+    private val currentUser
+        get() = FirebaseAuth.getInstance().currentUser
 
-    override fun subscribeToAllRecords(): LiveData<BaseResult> {
-        val result = MutableLiveData<BaseResult>()
+    private fun getUserPlantsCollection() = currentUser?.let { firebaseUser ->
+        db.collection(USERS_COLLECTION)
+                .document(firebaseUser.uid)
+                .collection(COLLECTION)
+    } ?: throw NoAuthException()
 
-        plantsReference.addSnapshotListener((object : EventListener<QuerySnapshot> {
-            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                if (error != null) {
-                    result.value = BaseResult.Error(error)
-                } else if (value != null) {
-                    val plants = mutableListOf<Plant>()
 
-                    for (doc: QueryDocumentSnapshot in value) {
-                        plants.add(doc.toObject((Plant::class.java)))
+    override fun subscribeToAllRecords(): LiveData<BaseResult> =
+            MutableLiveData<BaseResult>().apply {
+
+                try {
+                    getUserPlantsCollection().addSnapshotListener { snapshot, error ->
+                        value = error?.let { BaseResult.Error(it) }
+                                ?: snapshot?.let { snapshotDocument ->
+                                    val plants = snapshotDocument.documents.map {
+                                        it.toObject(Plant::class.java)
+                                    }
+                                    BaseResult.Success(plants)
+                                }
                     }
-
-                    result.value = BaseResult.Success(plants)
+                } catch (e: Throwable) {
+                    value = BaseResult.Error(e)
                 }
             }
 
-        }))
-        return result
-    }
+    override fun getPlantByID(id: String): LiveData<BaseResult> =
+            MutableLiveData<BaseResult>().apply {
+                try {
 
-    override fun getPlantByID(id: String): LiveData<BaseResult> {
-        val result = MutableLiveData<BaseResult>()
+                    getUserPlantsCollection().document(id)
+                            .get()
+                            .addOnSuccessListener { snapshot ->
+                                value = BaseResult.Success(snapshot.toObject(Plant::class.java))
+                            }
+                            .addOnFailureListener { exception ->
+                                value = BaseResult.Error(exception)
+                            }
+                } catch (e: Throwable) {
+                    value = BaseResult.Error(e)
+                }
+            }
 
-        plantsReference.document(id)
-                .get()
-                .addOnSuccessListener { snapshot -> result.value = BaseResult.Success(snapshot.toObject(Plant::class.java)) }
-                .addOnFailureListener { exception -> result.value = BaseResult.Error(exception) }
-        return result
-    }
+    override fun savePlant(plant: Plant): LiveData<BaseResult> =
+            MutableLiveData<BaseResult>().apply {
+                try {
+                    getUserPlantsCollection().document(plant.id)
+                            .set(plant)
+                            .addOnSuccessListener {
+                                OnSuccessListener<Void> {
+                                    value = BaseResult.Success(plant)
+                                }
+                            }
+                            .addOnFailureListener {
+                                OnFailureListener { exception -> value = BaseResult.Error(exception) }
+                            }
 
-    override fun savePlant(plant: Plant): LiveData<BaseResult> {
-        val result = MutableLiveData<BaseResult>()
+                } catch (e: Throwable) {
+                    value = BaseResult.Error(e)
+                }
+            }
 
-        plantsReference.document(plant.id)
-                .set(plant)
-                .addOnSuccessListener { OnSuccessListener<Void> { result.value = BaseResult.Success(plant) } }
-                .addOnFailureListener { OnFailureListener { exception -> result.value = BaseResult.Error(exception) } }
-        return result
-    }
-
+    override fun getCurrentUser(): LiveData<User?> =
+            MutableLiveData<User?>().apply {
+                value = currentUser?.let {
+                    User(it.displayName ?: "", it.email ?: "")
+                }
+            }
 }

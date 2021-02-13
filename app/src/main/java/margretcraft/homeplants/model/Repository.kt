@@ -7,5 +7,5 @@ object Repository {
     fun getPlants() = remoteDataProvider.subscribeToAllRecords()
     fun getPlantByID(id: String) = remoteDataProvider.getPlantByID(id)
     fun savePlant(plant: Plant) = remoteDataProvider.savePlant(plant)
-
+    fun getCurrentUser() = remoteDataProvider.getCurrentUser()
 }

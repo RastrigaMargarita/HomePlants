@@ -1,4 +1,4 @@
-package margretcraft.homeplants.ui
+package margretcraft.homeplants.ui.list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,8 @@ interface CustomItemClickListener {
     fun onItemClick(view: View?, position: Int, plant: Plant)
 }
 
-class ListAdapter(val mItemClickListener: CustomItemClickListener) : RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
+class ListAdapter(val mItemClickListener: CustomItemClickListener) :
+        RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
 
     var plants: List<Plant> = listOf()
         set(value) {
@@ -21,7 +22,8 @@ class ListAdapter(val mItemClickListener: CustomItemClickListener) : RecyclerVie
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_plant, parent, false)
+        val view: View = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_plant, parent, false)
         val mViewHolder = ItemViewHolder(view);
         return mViewHolder
     }
@@ -41,7 +43,6 @@ class ListAdapter(val mItemClickListener: CustomItemClickListener) : RecyclerVie
 
         fun bind(plant: Plant) {
             this.plant = plant
-
             ui.itemCategory.text = itemView.context.getString(plant.category.catname)
             ui.itemNomer.text = plant.nomer.toString()
             ui.itemRod.text = plant.rod

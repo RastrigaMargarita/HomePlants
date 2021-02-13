@@ -5,7 +5,6 @@ import kotlinx.android.parcel.Parcelize
 import margretcraft.homeplants.R
 import java.util.*
 
-
 @Parcelize
 data class Plant(val nomer: Int = 0,
                  val id: String = UUID.randomUUID().toString(),
@@ -29,8 +28,6 @@ data class Plant(val nomer: Int = 0,
     override fun hashCode(): Int {
         return id.hashCode()
     }
-
-
 }
 
 @Parcelize
@@ -38,13 +35,4 @@ enum class Category(val catname: Int) : Parcelable {
     DECICUOUS(R.string.decicuous),
     BLOOMING(R.string.blooming),
     SUCCULENT(R.string.succulent);
-
-    companion object {
-        fun getCategoryByInt(ID: Int): Category = when (ID) {
-            0 -> DECICUOUS
-            1 -> BLOOMING
-            2 -> SUCCULENT
-            else -> BLOOMING
-        }
-    }
 }
